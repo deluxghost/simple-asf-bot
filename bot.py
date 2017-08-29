@@ -10,7 +10,7 @@ import logging
 import re
 import sys
 
-logging.basicConfig(stream=sys.stdout, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)                                                                                     [0/1929]
+logging.basicConfig(stream=sys.stdout, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 pattern_2fa = re.compile(r'^\s*!?2[fF][aA]( +.+)?\s*$')
 
