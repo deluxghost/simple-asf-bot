@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
-token = '123456789:XXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXX'
+token = '123456789:XXXXXX-XXXXXXXXXXXXXXXXXXXXX'
 admin = '987654321'
-ipc = 'http://127.0.0.1:1242/IPC?command='
+ipc_password = ''
+ipc = 'http://127.0.0.1:1242/Api/Command/'
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Job
 import urllib.parse as parse, urllib.request as request, urllib.error
+import json
 import logging
 import re
 import sys
@@ -17,15 +19,25 @@ pattern_2fa = re.compile(r'^\s*!?2[fF][aA]( +.+)?\s*$')
 def asf_ipc(command):
     ipc_url = ipc + parse.quote(command)
     req = request.Request(ipc_url)
+    if ipc_password:
+        req.add_header("Authentication", ipc_password)
     try:
-        res_data = request.urlopen(req)
+        data = ''.encode('utf-8')
+        resp = request.urlopen(req, data=data)
     except urllib.error.HTTPError as e:
-        return e.reason
+        return '{0} - {1}'.format(str(e.code), e.reason)
     except urllib.error.URLError as e:
         return e.reason
     else:
-        res = res_data.read().decode("utf-8")
-        return res
+        res = resp.read().decode("utf-8")
+        return json_parse(res)
+
+def json_parse(incoming):
+    data = json.loads(incoming)
+    if data.get('Success'):
+        result = data.get('Result')
+        return result
+    return data.get('Message')
 
 def mfa_timeout(bot, job):
     bot.editMessageText(chat_id=job.context[0], message_id=job.context[1], text='[2FA Deleted]')
@@ -36,7 +48,7 @@ def start(bot, update):
 def reply(bot, update, job_queue):
     chat_id = update.message.chat_id
     command = update.message.text
-    if admin == str(chat_id):
+    if isinstance(admin, str) and admin == str(chat_id) or isinstance(admin, list) and str(chat_id) in admin:
         res = asf_ipc(command)
         if not isinstance(res, str):
             res = str(res)
