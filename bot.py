@@ -29,7 +29,10 @@ def reply(bot, update, job_queue):
         try:
             res = api.command(command)
         except Exception as e:
-            res = e.message
+            if hasattr(e, 'message'):
+                res = e.message
+            else:
+                res = e.__class__.__name__
         if not isinstance(res, str):
             res = str(res)
         msg = update.message.reply_text(res, quote=True)
