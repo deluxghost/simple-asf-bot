@@ -1,2 +1,2 @@
 python-telegram-bot
-ASF_IPC
+ASF_IPC>=1.1.1
