@@ -2,8 +2,7 @@
 
 token = '987654321:XXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 admin = '123456789'
-ipc_host = '127.0.0.1'
-ipc_port = 1242
+ipc_address = 'http://127.0.0.1:1242/'
 ipc_password = ''
 
 import logging
@@ -44,7 +43,7 @@ def reply(bot, update, job_queue):
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
-api = asf.IPC(ipc_host, int(ipc_port), ipc_password)
+api = asf.IPC(ipc_address, ipc_password)
 
 updater = Updater(token)
 updater.dispatcher.add_handler(CommandHandler('start', start))
