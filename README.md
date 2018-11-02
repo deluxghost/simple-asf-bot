@@ -20,7 +20,7 @@ pip3 install -r requirements.txt
 
 Edit `simple.conf`:
 
-```conf
+```ini
 [telegram]
 bot_token = 987654321:XXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXX  ; The API token of your Telegram bot
 admin_id = 123456789  ; Your Telegram number ID (not the username)
