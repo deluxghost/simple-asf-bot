@@ -6,6 +6,8 @@ import sys
 from aiotg import Bot, Chat
 from ASF import IPC
 
+__version__ = '18.1.0'
+
 if len(sys.argv) < 2:
     print('usage: python simple.py simple.conf')
     sys.exit(1)
@@ -14,13 +16,14 @@ config = configparser.ConfigParser()
 config.read(conf)
 BOT_TOKEN = config.get('telegram', 'bot_token', fallback='')
 ADMIN_ID = int(config.get('telegram', 'admin_id', fallback=0))
+PROXY = config.get('telegram', 'proxy', fallback=None)
 ADDRESS = config.get('ipc', 'address', fallback='http://127.0.0.1:1242/')
 PASSWORD = config.get('ipc', 'password', fallback='')
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger('simple_asf_bot')
 
-bot = Bot(BOT_TOKEN)
+bot = Bot(api_token=BOT_TOKEN, proxy=PROXY)
 
 
 async def command(asf, cmd):
