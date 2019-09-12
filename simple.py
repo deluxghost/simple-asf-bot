@@ -6,7 +6,7 @@ import sys
 from aiotg import Bot, Chat
 from ASF import IPC
 
-__version__ = '18.1.0'
+__version__ = '19.1.0'
 
 if len(sys.argv) < 2:
     print('usage: python simple.py simple.conf')
@@ -27,7 +27,9 @@ bot = Bot(api_token=BOT_TOKEN, proxy=PROXY)
 
 
 async def command(asf, cmd):
-    return await asf.Api.Command['command'].post(command=cmd)
+    return await asf.Api.Command.post(body={
+        'Command': cmd
+    })
 
 
 async def main():
